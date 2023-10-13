@@ -14,6 +14,7 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable, HasPermissionsTrait;
 
+    public $timestamps = false;
     /**
      * The attributes that are mass assignable.
      *
@@ -23,7 +24,6 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
-        'role',
     ];
 
     /**
@@ -32,8 +32,13 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
     protected $hidden = [
+        'name',
+        'email',
         'password',
         'remember_token',
+        'email_verified_at',
+        'created_at',
+        'updated_at',
     ];
 
     /**
@@ -79,6 +84,6 @@ class User extends Authenticatable implements JWTSubject
 
     public function files()
     {
-        return $this->belongsToMany(File::class, 'user_file', 'user_id', 'file_id')->withTimestamps();
+        return $this->belongsToMany(File::class, 'user_file', 'user_id', 'file_id');
     }
 }
