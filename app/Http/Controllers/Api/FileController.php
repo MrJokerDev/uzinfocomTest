@@ -15,35 +15,43 @@ class FileController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $user = User::find($user->id);
+        $user = User::with('files')->find($user->id);
         $role = $user->getRoles()->first();
+        $files = [];
 
-        if ($role === 'admin') {
-            $files = File::all();
-        } elseif ($role === 'moderator') {
+        if ($role === 'admin' || $role === 'moderator') {
             $files = File::all();
         } else {
-            $files = $user->files;
+            $files = $user->files->map(function ($file) {
+                $file->makeHidden('pivot');
+                $file->makeHidden('user');
+                return $file;
+            });
         }
 
-        foreach ($files as $file) {
-            $users = $file->user;
-            $modifiedUsers = [];
-
-            foreach ($users as $user) {
-                $userData = [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                ];
-                $modifiedUsers[] = $userData;
+        $modifiedFiles = $files->map(function ($file) {
+            if (isset($file->user)) {
+                $file->user = $file->user->map(function ($user) {
+                    return [
+                        'id' => $user->id,
+                        'name' => $user->name,
+                    ];
+                });
             }
 
-            $file->user = $modifiedUsers;
-        }
+            return $file;
+        });
 
-        return response()->json([
-            'files' => $files,
-        ]);
+
+        if (!empty($modifiedFiles)) {
+            return response()->json([
+                'files' => $modifiedFiles,
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'No files',
+            ]);
+        }
     }
 
     public function uploadFile(Request $request, FileService $fileService)
