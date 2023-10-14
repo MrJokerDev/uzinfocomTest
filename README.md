@@ -79,13 +79,13 @@ Users info:
 #### GET admin
 
 ```http
-  GET /api/admin
+  GET /api/files
 ```
 
 #### POST admin
 
 ```http
-  POST /api/admin
+  POST /api/upload-file
 ```
 
 | Parameter | Type     | Description                |
@@ -93,35 +93,13 @@ Users info:
 | `file` | `file` | .png, .jpeg, .jpg |
 
 
-#### GET moderator
+#### POST admin
 
 ```http
-  GET /api/moderator
+  DELETE /api/file/{id}
 ```
 
-#### POST moderator
+| Parameter | Type     |
+| :-------- | :------- |
+| `id` | `number` |
 
-```http
-  POST /api/moderator
-```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `file` | `file` | .png, .jpeg, .jpg |
-
-
-#### GET user
-
-```http
-  GET /api/user
-```
-
-#### POST user
-
-```http
-  POST /api/user
-```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `file` | `file` | .png, .jpeg, .jpg |
