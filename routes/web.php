@@ -1,9 +1,5 @@
 <?php
 
-use App\Http\Controllers\Api\AdminController;
-use App\Http\Controllers\Api\FileController;
-use App\Http\Controllers\Api\ModeratorController;
-use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*

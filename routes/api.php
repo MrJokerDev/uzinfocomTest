@@ -4,15 +4,14 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\FileController;
 use Illuminate\Support\Facades\Route;
 
-Route::controller(AuthController::class)->group(function () {
-    Route::post('login', 'login');
-    Route::post('register', 'register');
-    Route::post('logout', 'logout');
-    Route::post('refresh', 'refresh');
-});
+Route::post('login', [AuthController::class, 'login'])->name('login');
+Route::post('register', [AuthController::class, 'register'])->name('register');
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/files', [FileController::class, 'index']);
-    Route::post('/upload-file', [FileController::class, 'uploadFile']);
-    Route::delete('/file/{id}', [FileController::class, 'destroy']);
+Route::middleware('auth:api')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/refresh', [AuthController::class, 'refresh'])->name('refresh');
+
+    Route::get('/files', [FileController::class, 'index'])->name('file.index');
+    Route::post('/upload-file', [FileController::class, 'uploadFile'])->name('file.uploadFile');
+    Route::delete('/file/{id}', [FileController::class, 'destroy'])->name('file.destroy');
 });

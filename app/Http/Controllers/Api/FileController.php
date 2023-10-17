@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 class FileController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
         $user = User::with('files')->find($user->id);
@@ -42,10 +42,14 @@ class FileController extends Controller
             return $file;
         });
 
+        $credentials = $request->only('email', 'password');
+        $token = Auth::attempt($credentials);
+
 
         if (!empty($modifiedFiles)) {
             return response()->json([
                 'files' => $modifiedFiles,
+                'token' => $token
             ]);
         } else {
             return response()->json([

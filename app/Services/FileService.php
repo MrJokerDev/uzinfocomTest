@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\File;
 use App\Models\User;
+use Illuminate\Support\Str;
 
 class FileService
 {
@@ -15,7 +16,7 @@ class FileService
         $contents = file_get_contents($file->getRealPath());
         $md5Hash = md5($contents);
 
-        $fileNewName = $md5Hash . '.' . $file->getClientOriginalExtension();
+        $fileNewName = Str::uuid()->toString() . '.' . $file->getClientOriginalExtension();
 
         $existingFile = File::where('file', $fileNewName)->first();
 
